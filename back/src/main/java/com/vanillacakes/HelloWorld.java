@@ -1,4 +1,4 @@
-package main.java;
+package com.vanillacakes;
 
 public class HelloWorld {
     static void main() {
