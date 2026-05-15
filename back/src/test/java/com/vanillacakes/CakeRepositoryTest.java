@@ -53,17 +53,16 @@ class CakeRepositoryTest {
     @Test
     void shouldSaveCake() throws SQLException {
         Cake cake = new Cake(
-                1L,
                 "French Vanilla Cake",
                 "Very delicious cake",
                 new BigDecimal("14.99"),
                 true);
 
-        cakeRepository.save(cake);
+        Long createdCakeId = cakeRepository.save(cake).getId();
 
         String sql = "SELECT COUNT(*) FROM cakes WHERE ID = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setLong(1, cake.getId());
+        statement.setLong(1, createdCakeId);
         ResultSet resultSet = statement.executeQuery();
         resultSet.next();
         int count = resultSet.getInt(1);

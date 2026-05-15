@@ -53,8 +53,7 @@ public class Cake {
         //Default constructor
     }
 
-    public Cake(Long id, String name, String description, BigDecimal price, boolean active) {
-        this.id = id;
+    public Cake(String name, String description, BigDecimal price, boolean active) {
         this.name = name;
         this.description = description;
         this.price = price;

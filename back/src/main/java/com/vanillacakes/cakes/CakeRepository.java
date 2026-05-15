@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class CakeRepository {
 
@@ -42,25 +43,33 @@ public class CakeRepository {
         }
     }
 
-    public void save(Cake cake) {
+    public Cake save(Cake cake) {
         String sql = """
                     INSERT INTO cakes (
-                       id,
                        name,
                        description,
                        price,
                        active
-                    ) VALUES (?, ?, ?, ?, ?)
+                    ) VALUES (?, ?, ?, ?)
                 """;
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, cake.getId());
-            statement.setString(2, cake.getName());
-            statement.setString(3, cake.getDescription());
-            statement.setBigDecimal(4, cake.getPrice());
-            statement.setBoolean(5, cake.isActive());
+        try (PreparedStatement statement = connection.prepareStatement(sql,
+                Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, cake.getName());
+            statement.setString(2, cake.getDescription());
+            statement.setBigDecimal(3, cake.getPrice());
+            statement.setBoolean(4, cake.isActive());
 
             statement.executeUpdate();
+
+            ResultSet keys = statement.getGeneratedKeys();
+
+            if (!keys.next()) {
+                throw new RuntimeException("Could not get cake id");
+            }
+
+            Long generatedId = keys.getLong(1);
+            return this.findById(generatedId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -1,14 +1,11 @@
 package com.vanillacakes;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.vanillacakes.cakes.CakeController;
+import com.vanillacakes.cakes.CakeRepository;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,14 +17,12 @@ public class Application {
     }
 
     private static void setupDatabase() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/vanilla_db",
-                "vanilla_admin",
-                "vanilla_admin");
-
-        LiquibaseRunner.run(connection);
+        try (Connection connection = createConnection()) {
+            LiquibaseRunner.run(connection);
+        }
     }
 
-    private static void setupWebServer() throws LifecycleException {
+    private static void setupWebServer() throws LifecycleException, SQLException {
         Tomcat tomcat = new Tomcat();
 
         // Explicit port configuration (8080 is the default)
@@ -38,20 +33,24 @@ public class Application {
 
         Context context = tomcat.addContext("", null);
 
-        // Temporary servlet to test Tomcat setup
+        // TODO Global connection is fragile! Fix this.
+        Connection connection = createConnection();
+        CakeRepository cakeRepository = new CakeRepository(connection);
+        CakeController cakeController = new CakeController(cakeRepository);
+
         Tomcat.addServlet(context,
-                "helloWorldServlet",
-                new HttpServlet() {
-                    @Override
-                    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                        String wavingHandEmoji = "&#x1F44B;";
-                        resp.getWriter().write("<h1>Hello World! " + wavingHandEmoji + "</h1>");
-                    }
-                }
+                "cakeServlet",
+                cakeController
         );
 
-        context.addServletMappingDecoded("/", "helloWorldServlet");
+        context.addServletMappingDecoded("/api/cakes/*", "cakeServlet");
 
         tomcat.start();
+    }
+
+    private static Connection createConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5433/vanilla_db",
+                "vanilla_admin",
+                "vanilla_admin");
     }
 }
