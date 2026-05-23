@@ -4,8 +4,10 @@ import com.vanillacakes.cakes.CakeController;
 import com.vanillacakes.cakes.CakeRepository;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
+import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -31,7 +33,12 @@ public class Application {
         // Initializes the HTTP connector on port 8080
         tomcat.getConnector();
 
-        Context context = tomcat.addContext("", null);
+        File staticDir = new File("src/main/resources/static");
+        Context context = tomcat.addContext("",
+                staticDir.getAbsolutePath());
+
+        Tomcat.addServlet(context, "defaultServlet", new DefaultServlet());
+        context.addServletMappingDecoded("/", "defaultServlet");
 
         // TODO Global connection is fragile! Fix this.
         Connection connection = createConnection();
