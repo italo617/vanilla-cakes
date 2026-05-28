@@ -1,10 +1,14 @@
 package com.vanillacakes.cakes;
 
+import com.vanillacakes.PagedResult;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CakeRepository {
 
@@ -70,6 +74,60 @@ public class CakeRepository {
 
             Long generatedId = keys.getLong(1);
             return this.findById(generatedId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public PagedResult<Cake> findCakes(int pageNumber, int pageSize) {
+        String sql = """
+            SELECT id, name, description, price, active
+            FROM cakes
+            WHERE active IS TRUE
+            ORDER BY id
+            LIMIT ?
+            OFFSET ?
+            """;
+
+        String countSql = """
+            SELECT COUNT(*)
+            FROM cakes
+            WHERE active IS TRUE
+        """;
+
+
+        int offset = (pageNumber - 1) * pageSize;
+        try (PreparedStatement statement =
+                     connection.prepareStatement(sql);
+
+             PreparedStatement countStatement =
+                     connection.prepareStatement(countSql)
+        ) {
+
+            statement.setInt(1, pageSize);
+            statement.setInt(2, offset);
+
+            ResultSet resultSet = statement.executeQuery();
+            List<Cake> cakes = new ArrayList<>();
+            while (resultSet.next()) {
+
+                Cake cake = new Cake();
+                cake.setId(resultSet.getLong("id"));
+                cake.setName(resultSet.getString("name"));
+                cake.setDescription(resultSet.getString("description"));
+                cake.setPrice(resultSet.getBigDecimal("price"));
+                cake.setActive(resultSet.getBoolean("active"));
+
+                cakes.add(cake);
+            }
+
+            ResultSet countResultSet = countStatement.executeQuery();
+            countResultSet.next();
+            long totalElements = countResultSet.getLong(1);
+            int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+
+            return new PagedResult<>(cakes, pageNumber, pageSize, totalElements, totalPages);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

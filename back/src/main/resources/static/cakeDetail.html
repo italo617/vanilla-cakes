@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanilla Cakes</title>
-    <script src="./cakes.js" defer></script>
+    <title>Cake Detail</title>
+    <script src="cakeDetail.js" defer></script>
 </head>
-
 <body>
-    <main>
-        <div id="cakesContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;"></div>
+    <main id="cakeInformation">
+        <h1 id="cakeName"></h1>
+        <p id="cakeDescription"></p>
+        <p id="cakeUnitPrice"></p>
     </main>
-
-    <nav id="pagination"></nav>
-
     <div id="errorMessageDiv" hidden>
         <p id="errorMessageParagraph"></p>
     </div>
-
 </body>
 </html>

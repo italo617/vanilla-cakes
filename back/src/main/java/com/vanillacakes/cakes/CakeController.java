@@ -1,6 +1,7 @@
 package com.vanillacakes.cakes;
 
 import com.vanillacakes.BadRequestException;
+import com.vanillacakes.PagedResult;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,10 @@ import java.io.IOException;
 
 public class CakeController extends HttpServlet {
 
+    private static final int DEFAULT_PAGE_NUMBER = 1;
+    private static final int DEFAULT_PAGE_SIZE = 9;
+    private static final int MAX_PAGE_SIZE = 50;
+
     private final ObjectMapper mapper = new ObjectMapper();
     private final CakeRepository cakeRepository;
 
@@ -19,25 +24,18 @@ public class CakeController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id;
-        try {
-            id = extractId(req);
-        } catch (BadRequestException e) {
-          resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-          return;
-        }
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp)
+            throws ServletException, IOException {
 
-        Cake cake = cakeRepository.findById(id);
-        if (cake == null) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Cake not found");
+        String pathInfo = req.getPathInfo();
+
+        if (pathInfo == null || pathInfo.equals("/")) {
+            handleFindCakes(req, resp);
             return;
         }
 
-        String cakeJson = mapper.writeValueAsString(cake);
-
-        resp.setContentType("application/json");
-        resp.getWriter().write(cakeJson);
+        handleFindCakeById(req, resp);
     }
 
     @Override
@@ -57,6 +55,72 @@ public class CakeController extends HttpServlet {
         resp.getWriter().write(cakeJson);
     }
 
+    private void handleFindCakeById(HttpServletRequest req,
+                                    HttpServletResponse resp)
+            throws IOException {
+        Long id;
+        try {
+            id = extractId(req);
+
+        } catch (BadRequestException e) {
+            resp.sendError(
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    e.getMessage()
+            );
+            return;
+        }
+
+        Cake cake = cakeRepository.findById(id);
+        if (cake == null) {
+            resp.sendError(
+                    HttpServletResponse.SC_NOT_FOUND,
+                    "Cake not found"
+            );
+            return;
+        }
+
+        String cakeJson =
+                mapper.writeValueAsString(cake);
+        resp.setContentType("application/json");
+        resp.getWriter().write(cakeJson);
+    }
+
+    private void handleFindCakes(HttpServletRequest req,
+                                 HttpServletResponse resp)
+            throws IOException {
+
+        int pageNumber = DEFAULT_PAGE_NUMBER;
+        int pageSize = DEFAULT_PAGE_SIZE;
+
+        String pageNumberParam = req.getParameter("page");
+        String pageSizeParam = req.getParameter("pageSize");
+        try {
+            if (pageNumberParam != null) {
+                pageNumber = Integer.parseInt(pageNumberParam);
+            }
+            if (pageSizeParam != null) {
+                pageSize = Integer.parseInt(pageSizeParam);
+            }
+            if (pageNumber <= 0 || pageSize <= 0) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Pagination parameters must be positive");
+                return;
+            }
+            if (pageSize > MAX_PAGE_SIZE) {
+                pageSize = MAX_PAGE_SIZE;
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid pagination parameters");
+            return;
+        }
+
+        PagedResult<Cake> cakes =
+                cakeRepository.findCakes(pageNumber, pageSize);
+        String cakesJson = mapper.writeValueAsString(cakes);
+
+        resp.setContentType("application/json");
+        resp.getWriter().write(cakesJson);
+    }
+
     private Long extractId(HttpServletRequest req) {
         String pathInfo = req.getPathInfo();
 
@@ -70,6 +134,5 @@ public class CakeController extends HttpServlet {
         } catch (NumberFormatException e) {
             throw new BadRequestException("Invalid id in path");
         }
-
     }
 }

@@ -95,4 +95,78 @@ class CakeRepositoryTest {
         Cake nonExistingCake = cakeRepository.findById(999L);
         assertNull(nonExistingCake);
     }
+
+    @Test
+    void shouldFindActiveCakesWithPagination() throws SQLException {
+        insertCakePaginationScenario();
+
+        PagedResult<Cake> cakes =
+                cakeRepository.findCakes(1, 2);
+        assertEquals(2, cakes.content().size());
+        assertEquals(1, cakes.page());
+        assertEquals(2, cakes.pageSize());
+        assertEquals(3, cakes.totalElements());
+        assertEquals(2, cakes.totalPages());
+        Cake firstCake = cakes.content().getFirst();
+
+        assertEquals(1L, firstCake.getId());
+        assertEquals("French Vanilla Cake", firstCake.getName());
+        assertEquals("Classic vanilla cake with a smooth and rich flavor.", firstCake.getDescription());
+        assertEquals(new BigDecimal("10.00"), firstCake.getPrice());
+        assertTrue(firstCake.isActive());
+
+        Cake secondCake = cakes.content().get(1);
+        assertEquals(3L, secondCake.getId());
+        assertEquals("Vanilla Cream Cake", secondCake.getName());
+        assertEquals("Light vanilla cake filled with creamy vanilla frosting.", secondCake.getDescription());
+        assertEquals(new BigDecimal("15.00"), secondCake.getPrice());
+        assertTrue(secondCake.isActive());
+    }
+
+    @Test
+    void shouldReturnSecondPageOfActiveCakes() throws SQLException {
+        insertCakePaginationScenario();
+
+        PagedResult<Cake> cakes =
+                cakeRepository.findCakes(2, 2);
+        assertEquals(1, cakes.content().size());
+        assertEquals(2, cakes.page());
+        assertEquals(2, cakes.pageSize());
+        assertEquals(3, cakes.totalElements());
+        assertEquals(2, cakes.totalPages());
+        Cake cake = cakes.content().getFirst();
+
+        assertEquals(4L, cake.getId());
+        assertEquals("Vanilla Caramel Cake", cake.getName());
+        assertEquals("Moist vanilla cake layered with smooth caramel cream.", cake.getDescription());
+        assertEquals(new BigDecimal("18.99"), cake.getPrice());
+        assertTrue(cake.isActive());
+    }
+
+    @Test
+    void shouldReturnEmptyContentWhenPageIsOutOfRange() throws SQLException {
+        insertCakePaginationScenario();
+
+        PagedResult<Cake> cakes =
+                cakeRepository.findCakes(3, 2);
+        assertTrue(cakes.content().isEmpty());
+        assertEquals(3, cakes.page());
+        assertEquals(2, cakes.pageSize());
+        assertEquals(3, cakes.totalElements());
+        assertEquals(2, cakes.totalPages());
+    }
+
+    private void insertCakePaginationScenario() throws SQLException {
+        String sql = """
+                INSERT INTO cakes
+                (id, name, description, price, active)
+                VALUES
+                (1, 'French Vanilla Cake', 'Classic vanilla cake with a smooth and rich flavor.', 10.00, true),
+                (2, 'Vanilla Berry Cake', 'Soft vanilla cake topped with sweet mixed berries.', 12.00, false),
+                (3, 'Vanilla Cream Cake', 'Light vanilla cake filled with creamy vanilla frosting.', 15.00, true),
+                (4, 'Vanilla Caramel Cake', 'Moist vanilla cake layered with smooth caramel cream.', 18.99, true)
+                """;
+
+        connection.createStatement().executeUpdate(sql);
+    }
 }
