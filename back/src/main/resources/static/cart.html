@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vanilla Cakes - Cart</title>
+    <script type="module" src="./cart.js" defer></script>
+</head>
+<body>
+    <main id="cartInformation">
+        <h1>Cart</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th><!-- Column reserved for remove button --></th>
+                </tr>
+            </thead>
+            <tbody id="cartItems"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td id="cartTotal">$ 0.00</td>
+                    <td id="clearCartTd"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </main>
+
+    <div id="errorMessageDiv" hidden>
+        <p id="errorMessageParagraph"></p>
+    </div>
+</body>
+</html>

@@ -36,6 +36,9 @@ public class Application {
         File staticDir = new File("src/main/resources/static");
         Context context = tomcat.addContext("",
                 staticDir.getAbsolutePath());
+        //To avoid the Request blocking of JS files.
+        //See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Content-Type-Options
+        context.addMimeMapping("js", "text/javascript");
 
         Tomcat.addServlet(context, "defaultServlet", new DefaultServlet());
         context.addServletMappingDecoded("/", "defaultServlet");

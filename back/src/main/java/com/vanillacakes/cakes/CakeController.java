@@ -51,6 +51,7 @@ public class CakeController extends HttpServlet {
         String cakeJson = mapper.writeValueAsString(cake);
 
         resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         resp.setStatus(HttpServletResponse.SC_CREATED);
         resp.getWriter().write(cakeJson);
     }
@@ -82,6 +83,7 @@ public class CakeController extends HttpServlet {
         String cakeJson =
                 mapper.writeValueAsString(cake);
         resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(cakeJson);
     }
 
@@ -118,6 +120,7 @@ public class CakeController extends HttpServlet {
         String cakesJson = mapper.writeValueAsString(cakes);
 
         resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(cakesJson);
     }
 
