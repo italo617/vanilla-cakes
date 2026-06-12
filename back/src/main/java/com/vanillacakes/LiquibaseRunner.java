@@ -12,7 +12,7 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import java.sql.Connection;
 
 public class LiquibaseRunner {
-    static void run (Connection connection) {
+    public static void run (Connection connection) {
         try {
             Database database = DatabaseFactory.getInstance()
                     .findCorrectDatabaseImplementation(new JdbcConnection(connection));

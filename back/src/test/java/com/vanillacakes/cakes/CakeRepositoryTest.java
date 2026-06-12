@@ -1,7 +1,7 @@
-package com.vanillacakes;
+package com.vanillacakes.cakes;
 
-import com.vanillacakes.cakes.Cake;
-import com.vanillacakes.cakes.CakeRepository;
+import com.vanillacakes.LiquibaseRunner;
+import com.vanillacakes.PagedResult;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
