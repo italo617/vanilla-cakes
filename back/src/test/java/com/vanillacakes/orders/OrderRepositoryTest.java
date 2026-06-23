@@ -74,12 +74,12 @@ class OrderRepositoryTest {
         long orderItem1CakeId = 100L;
         int orderItem1Quantity = 2;
         BigDecimal orderItem1UnitPrice = new BigDecimal("22.99");
-        order.getOrderItems().add(createOrderItem(orderItem1CakeId, orderItem1Quantity, orderItem1UnitPrice));
+        order.getOrderItems().add(new OrderItem(orderItem1CakeId, orderItem1Quantity, orderItem1UnitPrice));
 
         long orderItem2CakeId = 300L;
         int orderItem2Quantity = 1;
         BigDecimal orderItem2UnitPrice = new BigDecimal("30.99");
-        order.getOrderItems().add(createOrderItem(orderItem2CakeId, orderItem2Quantity, orderItem2UnitPrice));
+        order.getOrderItems().add(new OrderItem(orderItem2CakeId, orderItem2Quantity, orderItem2UnitPrice));
 
         Order savedOrder = orderRepository.save(order);
 
@@ -112,14 +112,14 @@ class OrderRepositoryTest {
             int obtainedOrderItemQuantity = orderItemsResultSet.getInt(2);
             BigDecimal obtainedOrderItemUnitPrice = orderItemsResultSet.getBigDecimal(3);
             long obtainedOrderItemOrderId = orderItemsResultSet.getLong(4);
-            OrderItem orderItem = createOrderItem(obtainedOrderItemCakeId, obtainedOrderItemQuantity,
-                    obtainedOrderItemUnitPrice, obtainedOrderItemOrderId);
+            OrderItem orderItem = new OrderItem(obtainedOrderItemOrderId, obtainedOrderItemCakeId,
+                    obtainedOrderItemQuantity, obtainedOrderItemUnitPrice);
             obtainedOrderItems.add(orderItem);
         }
 
         Set<OrderItem> expectedOrderItems = Set.of(
-                createOrderItem(orderItem1CakeId, orderItem1Quantity, orderItem1UnitPrice, savedOrder.getId()),
-                createOrderItem(orderItem2CakeId, orderItem2Quantity, orderItem2UnitPrice, savedOrder.getId()));
+                new OrderItem(savedOrder.getId(), orderItem1CakeId, orderItem1Quantity, orderItem1UnitPrice),
+                new OrderItem(savedOrder.getId(), orderItem2CakeId, orderItem2Quantity, orderItem2UnitPrice));
         assertEquals(expectedOrderItems, obtainedOrderItems);
     }
 
@@ -171,9 +171,9 @@ class OrderRepositoryTest {
         Order order = orderRepository.findById(100L);
 
         Set<OrderItem> expectedOrderItems = Set.of(
-                createOrderItem(orderItem1CakeId, orderItem1Quantity, orderItem1UnitPrice, 100L),
-                createOrderItem(orderItem2CakeId, orderItem2Quantity, orderItem2UnitPrice, 100L),
-                createOrderItem(orderItem3CakeId, orderItem3Quantity, orderItem3UnitPrice, 100L));
+                new OrderItem(100L, orderItem1CakeId, orderItem1Quantity, orderItem1UnitPrice),
+                new OrderItem(100L, orderItem2CakeId, orderItem2Quantity, orderItem2UnitPrice),
+                new OrderItem(100L, orderItem3CakeId, orderItem3Quantity, orderItem3UnitPrice));
         assertEquals(expectedOrderItems, new HashSet<>(order.getOrderItems()));
     }
 
@@ -182,19 +182,4 @@ class OrderRepositoryTest {
         Order nonExistingOrder = orderRepository.findById(999L);
         assertNull(nonExistingOrder);
     }
-
-    private OrderItem createOrderItem(long cakeId, int quantity, BigDecimal unitPrice) {
-        OrderItem orderItem = new OrderItem();
-        orderItem.setCakeId(cakeId);
-        orderItem.setQuantity(quantity);
-        orderItem.setUnitPrice(unitPrice);
-        return orderItem;
-    }
-
-    private OrderItem createOrderItem(long cakeId, int quantity, BigDecimal unitPrice, long orderId) {
-        OrderItem orderItem = createOrderItem(cakeId, quantity, unitPrice);
-        orderItem.setOrderId(orderId);
-        return orderItem;
-    }
-
 }

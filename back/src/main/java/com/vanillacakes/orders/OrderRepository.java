@@ -50,12 +50,8 @@ public class OrderRepository {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setId(resultSet.getLong(1));
-                orderItem.setOrderId(id);
-                orderItem.setCakeId(resultSet.getLong(2));
-                orderItem.setQuantity(resultSet.getInt(3));
-                orderItem.setUnitPrice(resultSet.getBigDecimal(4));
+                OrderItem orderItem = new OrderItem(resultSet.getLong(1), id,
+                        resultSet.getLong(2), resultSet.getInt(3), resultSet.getBigDecimal(4));
 
                 order.getOrderItems().add(orderItem);
             }

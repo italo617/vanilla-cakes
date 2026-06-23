@@ -2,6 +2,9 @@ package com.vanillacakes;
 
 import com.vanillacakes.cakes.CakeController;
 import com.vanillacakes.cakes.CakeRepository;
+import com.vanillacakes.orders.OrderController;
+import com.vanillacakes.orders.OrderRepository;
+import com.vanillacakes.orders.OrderService;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.servlets.DefaultServlet;
@@ -45,6 +48,7 @@ public class Application {
 
         // TODO Global connection is fragile! Fix this.
         Connection connection = createConnection();
+
         CakeRepository cakeRepository = new CakeRepository(connection);
         CakeController cakeController = new CakeController(cakeRepository);
 
@@ -52,8 +56,16 @@ public class Application {
                 "cakeServlet",
                 cakeController
         );
-
         context.addServletMappingDecoded("/api/cakes/*", "cakeServlet");
+
+        OrderRepository orderRepository = new OrderRepository(connection);
+        OrderService orderService = new OrderService(orderRepository);
+        OrderController orderController = new OrderController(orderService);
+
+        Tomcat.addServlet(context,
+                "orderServlet",
+                orderController);
+        context.addServletMappingDecoded("/api/orders/*", "orderServlet");
 
         tomcat.start();
     }

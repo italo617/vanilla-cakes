@@ -10,44 +10,52 @@ public class OrderItem {
     private int quantity;
     private BigDecimal unitPrice;
 
-    public long getId() {
-        return id;
+    public OrderItem(long cakeId, int quantity, BigDecimal unitPrice) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Item quantity must be positive");
+        }
+
+        this.cakeId = cakeId;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
     }
 
-    public void setId(long id) {
+    public OrderItem(long orderId, long cakeId, int quantity, BigDecimal unitPrice) {
+        this(cakeId, quantity, unitPrice);
+        this.orderId = orderId;
+    }
+
+    public OrderItem(long id, long orderId, long cakeId, int quantity, BigDecimal unitPrice) {
+        this(orderId, cakeId, quantity, unitPrice);
         this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
-    }
-
     public long getCakeId() {
         return cakeId;
-    }
-
-    public void setCakeId(long cakeId) {
-        this.cakeId = cakeId;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public OrderItem updateQuantity(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Item quantity must be positive");
+        }
+        int updatedQuantity = this.quantity + quantity;
+        return new OrderItem(this.id, this.orderId, this.cakeId, updatedQuantity, this.unitPrice);
     }
 
     public BigDecimal getUnitPrice() {
         return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
     }
 
     /*
