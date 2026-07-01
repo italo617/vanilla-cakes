@@ -6,6 +6,7 @@ const cartItemsElementId = "cartItems";
 const cartTotalElementId = "cartTotal";
 const totalCakePriceClassName = "total_price";
 const clearCartTdElementId = "clearCartTd";
+const proceedToCheckoutButtonElementId = "proceedToCheckoutButton"
 const errorMessageDivId = "errorMessageDiv";
 const errorMessageParagraphId = "errorMessageParagraph";
 
@@ -120,4 +121,13 @@ function createCakeRow(cake, quantity) {
     document.getElementById(cartItemsElementId).append(tableRowElement)
 }
 
+function addFunctionToProceedToCheckoutButton() {
+    const proceedToCheckoutButton = document.getElementById(proceedToCheckoutButtonElementId);
+
+    proceedToCheckoutButton.addEventListener("click", () => {
+        window.location.href = "checkout.html";
+    })
+}
+
 await loadCartTable();
+addFunctionToProceedToCheckoutButton();

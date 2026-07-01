@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="module" src="./checkout.js" defer></script>
+    <title>Vanilla Cakes - Checkout</title>
+</head>
+<body>
+    <main id="checkout-information">
+        <h1>Checkout</h1>
+        <p>
+            <strong>Notice: </strong>
+            This is a study project.
+            No payment will be processed, no order will be shipped, and no real products will be delivered.
+        </p>
+        <form id="checkout-order">
+            <h2>Customer Information</h2>
+            <p><label for="address">Address: </label><input id="address" type="text" required/></p>
+            <p><label for="recipient">Recipient Name: </label><input id="recipient" type="text" required/></p>
+
+            <h2>Payment</h2>
+            <p><input id="cash" name="payment-method" type="radio" value="cash" required><label for="cash">Cash on
+                Delivery</label></p>
+            <p><input id="credit-card" name="payment-method" type="radio" value="credit-card" required><label
+                    for="credit-card">Credit Card</label></p>
+            <p><input id="debit-card" name="payment-method" type="radio" value="debit-card" required><label
+                    for="debit-card">Debit Card</label></p>
+
+            <h2>Summary of Your Order</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Cake</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody id="order-items"></tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td id="order-total">$ 0.00</td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <button id="submit-button" type="submit">Place Order</button>
+        </form>
+    </main>
+
+    <div id="errorMessageDiv" hidden>
+        <p id="errorMessageParagraph"></p>
+    </div>
+</body>
+</html>

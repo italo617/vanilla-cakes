@@ -30,6 +30,10 @@ public class OrderItem {
         this.id = id;
     }
 
+    public OrderItem() {
+        //Required by Jackson for deserialization
+    }
+
     public long getId() {
         return id;
     }
