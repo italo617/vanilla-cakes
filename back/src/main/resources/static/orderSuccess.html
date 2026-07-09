@@ -9,10 +9,14 @@
 <body>
     <main id="order-success-content">
         <h1>Order Successfully Placed</h1>
-        <p><strong>Order ID:</strong> #<span id="order-id"></span></p>
-        <p><strong>Order date:</strong> <span id="order-created-at"></span></p>
+        <dl>
+            <dt>Order ID:</dt> <dd>#<span id="order-id"></span></dd>
+            <dt>Order Date:</dt> <dd id="order-created-at"></dd>
+            <dt>Recipient Name:</dt> <dd id="order-client-name"></dd>
+            <dt>Full Address:</dt> <dd id="order-full-address"></dd>
+            <dt>Payment Method:</dt> <dd id="order-payment-method"></dd>
+        </dl>
         <p>Your delicious cakes will never arrive, but thank you for helping test this project.</p>
-        <p>Thanks for trying Vanilla Cakes!</p>
     </main>
     <div id="errorMessageDiv" hidden>
         <p id="errorMessageParagraph"></p>

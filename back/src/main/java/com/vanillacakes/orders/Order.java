@@ -8,6 +8,9 @@ public class Order {
     private Long id;
     private LocalDateTime createdAt;
     private List<OrderItem> orderItems = new ArrayList<>();
+    private String clientName;
+    private String fullAddress;
+    private PaymentMethod paymentMethod;
 
     public Long getId() {
         return id;
@@ -33,6 +36,30 @@ public class Order {
         this.orderItems = orderItems;
     }
 
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     /**
      * Method to copy all attributes from an order object to another. This method doesn't clone order items.
      */
@@ -41,6 +68,9 @@ public class Order {
         clone.setId(this.getId());
         clone.setCreatedAt(this.getCreatedAt());
         clone.setOrderItems(new ArrayList<>(this.getOrderItems()));
+        clone.setClientName(this.getClientName());
+        clone.setFullAddress(this.getFullAddress());
+        clone.setPaymentMethod(this.getPaymentMethod());
         return clone;
     }
 }

@@ -1,6 +1,7 @@
 import {loadCart} from "./cartCommons.js";
 
 const checkoutInformationElementId = "checkout-information";
+const checkoutOrderElementId = "checkout-order";
 const cartItemsElementId = "order-items";
 const orderTotalElementId = "order-total";
 const totalCakePriceClassName = "total_price";
@@ -8,7 +9,6 @@ const errorMessageDivId = "errorMessageDiv";
 const errorMessageParagraphId = "errorMessageParagraph";
 
 function showError(message) {
-    document.getElementById(checkoutInformationElementId).innerHTML = "";
     document.getElementById(checkoutInformationElementId).hidden = true;
     document.getElementById(errorMessageDivId).hidden = false;
     document.getElementById(errorMessageParagraphId).textContent = message;
@@ -45,10 +45,6 @@ async function getCake(cakeId) {
     return await response.json();
 }
 
-function getCakeTotalPriceElementId(cakeId) {
-    return "total_price_cake_" + cakeId;
-}
-
 function updateCartTotal() {
     let cartTotal = 0.0;
     const totalPriceElements = Array.from(document.getElementsByClassName(totalCakePriceClassName));
@@ -75,7 +71,6 @@ function createCakeRow(cake, quantity) {
     tableRowElement.appendChild(tableDataQuantityElement);
 
     const tableDataTotalPriceElement = document.createElement("td");
-    tableDataTotalPriceElement.id = getCakeTotalPriceElementId(cake.id);
     tableDataTotalPriceElement.classList.add(totalCakePriceClassName);
     tableDataTotalPriceElement.dataset.totalPrice = String(cakeUnitPrice * quantity);
     tableDataTotalPriceElement.innerText = `$ ${(Number(tableDataTotalPriceElement.dataset.totalPrice)).toFixed(2)}`;
@@ -93,15 +88,18 @@ function createOrderEntry(cake, quantity) {
 }
 
 function registerPlaceOrderHandler(orderItems) {
-    // TODO Save customer and payment information.
-
-    const form = document.getElementById("checkout-order");
+    const form = document.getElementById(checkoutOrderElementId);
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
+        const formData = new FormData(event.target);
+
         const order = {
-            orderItems: orderItems
+            orderItems: orderItems,
+            clientName: formData.get('client-name'),
+            fullAddress: formData.get('full-address'),
+            paymentMethod: formData.get('payment-method')
         };
 
         const response = await fetch("/api/orders", {

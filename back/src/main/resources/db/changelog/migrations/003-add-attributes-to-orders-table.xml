@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,8 +5,12 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <include file="db/changelog/migrations/001-create-cakes-table.xml"/>
-    <include file="db/changelog/migrations/002-create-orders-and-order-items-table.xml"/>
-    <include file="db/changelog/migrations/003-add-attributes-to-orders-table.xml"/>
+    <changeSet id="001" author="italo617">
+        <addColumn tableName="orders">
+            <column name="client_name" type="VARCHAR(255)"/>
+            <column name="full_address" type="VARCHAR(255)"/>
+            <column name="payment_method" type="VARCHAR(63)"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

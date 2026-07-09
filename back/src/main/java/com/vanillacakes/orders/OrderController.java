@@ -27,6 +27,9 @@ public class OrderController extends HttpServlet {
 
             Order order = new Order();
             order.setOrderItems(createOrderRequest.orderItems());
+            order.setClientName(createOrderRequest.clientName());
+            order.setFullAddress(createOrderRequest.fullAddress());
+            order.setPaymentMethod(PaymentMethod.fromIdentifier(createOrderRequest.paymentMethod()));
             createdOrder = orderService.createOrder(order);
         } catch (IOException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request body");

@@ -32,7 +32,7 @@ class OrderRepositoryTest {
         connection.close();
 
          /*
-           New connection for because Liquibase changes the connection auto-commit mode internally,
+           New connection because Liquibase changes the connection auto-commit mode internally,
            which affect the test transaction behavior afterwards.
         */
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5434/vanilla_db_test",
@@ -70,6 +70,12 @@ class OrderRepositoryTest {
     @Test
     void shouldSaveOrder() throws SQLException {
         Order order = new Order();
+        String clientName = "John Doe";
+        order.setClientName(clientName);
+        String fullAddress = "123 Example Street, Example City, EX 12345, USA";
+        order.setFullAddress(fullAddress);
+        PaymentMethod paymentMethod = PaymentMethod.CREDIT_CARD;
+        order.setPaymentMethod(paymentMethod);
 
         long orderItem1CakeId = 100L;
         int orderItem1Quantity = 2;
@@ -84,7 +90,7 @@ class OrderRepositoryTest {
         Order savedOrder = orderRepository.save(order);
 
         String sql_order = """
-                    SELECT created_at 
+                    SELECT created_at, client_name, full_address, payment_method 
                     FROM orders
                     WHERE id = ?
                 """;
@@ -95,6 +101,9 @@ class OrderRepositoryTest {
         orderResultSet.next();
         Timestamp createdAt = orderResultSet.getTimestamp(1);
         assertNotNull(createdAt);
+        assertEquals(clientName, orderResultSet.getString(2));
+        assertEquals(fullAddress, orderResultSet.getString(3));
+        assertEquals(paymentMethod, PaymentMethod.fromIdentifier(orderResultSet.getString(4)));
 
         String sql_order_items = """
                     SELECT cake_id, quantity, unit_price, order_id
@@ -127,12 +136,18 @@ class OrderRepositoryTest {
     void shouldFindExistingOrderAndItsItems() throws SQLException {
         String sql_order = """
                     INSERT INTO orders
-                    (id, created_at)
+                    (id, created_at, client_name, full_address, payment_method)
                     VALUES
-                    (100, ?)
+                    (100, ?, ?, ?, ?)
                 """;
         PreparedStatement orderStatement = connection.prepareStatement(sql_order);
         orderStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+        String savedClientName = "Jane Doe";
+        orderStatement.setString(2, savedClientName);
+        String savedFullAddress = "456 Example Street, Example City, EX 12345, USA";
+        orderStatement.setString(3, savedFullAddress);
+        PaymentMethod savedPaymentMethod = PaymentMethod.DEBIT_CARD;
+        orderStatement.setString(4, savedPaymentMethod.getIdentifier());
         orderStatement.executeUpdate();
 
         String sql_order_items = """
@@ -169,6 +184,9 @@ class OrderRepositoryTest {
         orderItemsStatement.executeUpdate();
 
         Order order = orderRepository.findById(100L);
+        assertEquals(savedClientName, order.getClientName());
+        assertEquals(savedFullAddress, order.getFullAddress());
+        assertEquals(savedPaymentMethod, order.getPaymentMethod());
 
         Set<OrderItem> expectedOrderItems = Set.of(
                 new OrderItem(100L, orderItem1CakeId, orderItem1Quantity, orderItem1UnitPrice),
@@ -178,7 +196,7 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void shouldReturnNullWhenOrderDoesNotExist() throws SQLException {
+    void shouldReturnNullWhenOrderDoesNotExist() {
         Order nonExistingOrder = orderRepository.findById(999L);
         assertNull(nonExistingOrder);
     }

@@ -16,16 +16,18 @@
         </p>
         <form id="checkout-order">
             <h2>Customer Information</h2>
-            <p><label for="address">Address: </label><input id="address" type="text" required/></p>
-            <p><label for="recipient">Recipient Name: </label><input id="recipient" type="text" required/></p>
+            <p><label for="client-name">Recipient Name: </label><input id="client-name" name="client-name" type="text" required/></p>
+            <p><label for="full-address">Full Address: </label><input id="full-address" name="full-address" type="text" required/></p>
 
-            <h2>Payment</h2>
-            <p><input id="cash" name="payment-method" type="radio" value="cash" required><label for="cash">Cash on
-                Delivery</label></p>
-            <p><input id="credit-card" name="payment-method" type="radio" value="credit-card" required><label
-                    for="credit-card">Credit Card</label></p>
-            <p><input id="debit-card" name="payment-method" type="radio" value="debit-card" required><label
-                    for="debit-card">Debit Card</label></p>
+            <fieldset>
+                <legend>Payment</legend>
+                <p><input id="cash" name="payment-method" type="radio" value="cash_on_delivery" required><label for="cash">Cash on
+                    Delivery</label></p>
+                <p><input id="credit-card" name="payment-method" type="radio" value="credit_card" required><label
+                        for="credit-card">Credit Card</label></p>
+                <p><input id="debit-card" name="payment-method" type="radio" value="debit_card" required><label
+                        for="debit-card">Debit Card</label></p>
+            </fieldset>
 
             <h2>Summary of Your Order</h2>
             <table>

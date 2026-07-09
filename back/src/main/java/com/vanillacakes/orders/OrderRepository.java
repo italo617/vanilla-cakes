@@ -17,7 +17,7 @@ public class OrderRepository {
 
     public Order findById(Long id) {
         String sql_order = """
-                    SELECT id, created_at
+                    SELECT id, created_at, client_name, full_address, payment_method
                     FROM orders
                     WHERE id = ?
                 """;
@@ -34,6 +34,9 @@ public class OrderRepository {
             order.setId(resultSet.getLong(1));
             Timestamp createdAtTimestamp = resultSet.getTimestamp(2);
             order.setCreatedAt(createdAtTimestamp.toLocalDateTime());
+            order.setClientName(resultSet.getString(3));
+            order.setFullAddress(resultSet.getString(4));
+            order.setPaymentMethod(PaymentMethod.fromIdentifier(resultSet.getString(5)));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -66,15 +69,18 @@ public class OrderRepository {
     public Order save(Order order) {
         String sql_order = """
                     INSERT INTO orders
-                    (created_at)
+                    (created_at, client_name, full_address, payment_method)
                     VALUES
-                    (?)
+                    (?, ?, ?, ?)
                 """;
 
         long orderId;
         try (PreparedStatement statement = connection.prepareStatement(sql_order,
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setObject(1, LocalDateTime.now());
+            statement.setString(2, order.getClientName());
+            statement.setString(3, order.getFullAddress());
+            statement.setString(4, order.getPaymentMethod().getIdentifier());
 
             statement.executeUpdate();
 

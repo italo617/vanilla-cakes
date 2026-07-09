@@ -31,12 +31,18 @@ class OrderServiceTest {
         OrderItem orderItem1 = new OrderItem(1L, 2, new BigDecimal("10.00"));
         OrderItem orderItem2 = new OrderItem(2L, 5, new BigDecimal("20.00"));
         order.setOrderItems(new ArrayList<>(List.of(orderItem1, orderItem2)));
+        order.setClientName("John Doe");
+        order.setFullAddress("123 Example Street, Example City, EX 12345, USA");
+        order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
         long orderId = 99L;
         when(orderRepository.save(ArgumentMatchers.any(Order.class))).thenReturn(fakeSave(order, orderId));
 
         Order createdOrder = orderService.createOrder(order);
         assertEquals(orderId, createdOrder.getId());
+        assertEquals(order.getClientName(), createdOrder.getClientName());
+        assertEquals(order.getFullAddress(), createdOrder.getFullAddress());
+        assertEquals(order.getPaymentMethod(), createdOrder.getPaymentMethod());
         OrderItem expectedOrderItem1 = new OrderItem(orderId, 1L, 2, new BigDecimal("10.00"));
         OrderItem expectedOrderItem2 = new OrderItem(orderId, 2L, 5, new BigDecimal("20.00"));
         assertEquals(Set.of(expectedOrderItem1, expectedOrderItem2), new HashSet<>(createdOrder.getOrderItems()));
@@ -45,6 +51,9 @@ class OrderServiceTest {
     @Test
     public void shouldNotCreateOrderWithoutItems() {
         Order order = new Order();
+        order.setClientName("Jane Doe");
+        order.setFullAddress("456 Example Street, Example City, EX 12345, USA");
+        order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             orderService.createOrder(order);
@@ -54,12 +63,64 @@ class OrderServiceTest {
     }
 
     @Test
+    public void shouldNotCreateOrderWithoutClientName() {
+        Order order = new Order();
+        OrderItem orderItem1 = new OrderItem(1L, 2, new BigDecimal("10.00"));
+        OrderItem orderItem2 = new OrderItem(2L, 5, new BigDecimal("20.00"));
+        order.setOrderItems(new ArrayList<>(List.of(orderItem1, orderItem2)));
+        order.setFullAddress("456 Example Street, Example City, EX 12345, USA");
+        order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.createOrder(order);
+        });
+
+        assertEquals("Client name cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    public void shouldNotCreateOrderWithoutFullAddress() {
+        Order order = new Order();
+        OrderItem orderItem1 = new OrderItem(1L, 2, new BigDecimal("10.00"));
+        OrderItem orderItem2 = new OrderItem(2L, 5, new BigDecimal("20.00"));
+        order.setOrderItems(new ArrayList<>(List.of(orderItem1, orderItem2)));
+        order.setClientName("Jane Doe");
+        order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.createOrder(order);
+        });
+
+        assertEquals("Address cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    public void shouldNotCreateOrderWithoutPaymentMethod() {
+        Order order = new Order();
+        OrderItem orderItem1 = new OrderItem(1L, 2, new BigDecimal("10.00"));
+        OrderItem orderItem2 = new OrderItem(2L, 5, new BigDecimal("20.00"));
+        order.setOrderItems(new ArrayList<>(List.of(orderItem1, orderItem2)));
+        order.setClientName("Jane Doe");
+        order.setFullAddress("456 Example Street, Example City, EX 12345, USA");
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.createOrder(order);
+        });
+
+        assertEquals("Payment method cannot be empty", exception.getMessage());
+    }
+
+
+    @Test
     public void shouldNotCreateOrderThatSurpass30ItemsQuantityLimit() {
         Order order = new Order();
         OrderItem orderItem1 = new OrderItem(1L, 3, new BigDecimal("10.00"));
         OrderItem orderItem2 = new OrderItem(2L, 10, new BigDecimal("20.00"));
         OrderItem orderItem3 = new OrderItem(3L, 18, new BigDecimal("30.00"));
         order.setOrderItems(new ArrayList<>(List.of(orderItem1, orderItem2, orderItem3)));
+        order.setClientName("Jane Doe");
+        order.setFullAddress("456 Example Street, Example City, EX 12345, USA");
+        order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             orderService.createOrder(order);
@@ -75,6 +136,9 @@ class OrderServiceTest {
         OrderItem orderItem2 = new OrderItem(2L, 4, new BigDecimal("20.00"));
         OrderItem orderItem3 = new OrderItem(1L, 5, new BigDecimal("10.00"));
         order.setOrderItems(new ArrayList<>(List.of(orderItem1, orderItem2, orderItem3)));
+        order.setClientName("Jane Doe");
+        order.setFullAddress("456 Example Street, Example City, EX 12345, USA");
+        order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
         Order aggregateOrder = orderService.aggregateOrderItems(order);
         OrderItem expectedOrderItem1 = new OrderItem(1L, 8, new BigDecimal("10.00"));

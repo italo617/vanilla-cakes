@@ -1,5 +1,7 @@
 package com.vanillacakes.orders;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,6 +19,7 @@ public class OrderService {
 
     public Order createOrder(Order order) {
         validateOrderItemsQuantity(order);
+        validateCustomerInformation(order);
         Order aggregatedOrder = aggregateOrderItems(order);
         return orderRepository.save(aggregatedOrder);
     }
@@ -31,6 +34,18 @@ public class OrderService {
         }
         if (totalOrderItems > MAX_ITEMS_PER_ORDER) {
             throw new IllegalArgumentException("Max items per order exceeded");
+        }
+    }
+
+    private void validateCustomerInformation(Order order) {
+        if (StringUtils.isBlank(order.getClientName())) {
+            throw new IllegalArgumentException("Client name cannot be empty");
+        }
+        if (StringUtils.isBlank(order.getFullAddress())) {
+            throw new IllegalArgumentException("Address cannot be empty");
+        }
+        if (order.getPaymentMethod() == null) {
+            throw new IllegalArgumentException("Payment method cannot be empty");
         }
     }
 
