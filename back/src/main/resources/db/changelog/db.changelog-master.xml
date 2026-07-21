@@ -10,5 +10,6 @@
     <include file="db/changelog/migrations/001-create-cakes-table.xml"/>
     <include file="db/changelog/migrations/002-create-orders-and-order-items-table.xml"/>
     <include file="db/changelog/migrations/003-add-attributes-to-orders-table.xml"/>
+    <include file="db/changelog/migrations/004-create-cake-images-table.xml"/>
 
 </databaseChangeLog>

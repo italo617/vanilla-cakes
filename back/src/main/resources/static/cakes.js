@@ -3,6 +3,8 @@ const paginationElementId = "pagination";
 const errorMessageDivId = "errorMessageDiv";
 const errorMessageParagraphId = "errorMessageParagraph";
 
+const cakeImageBaseUrl = "/api/cake-images/by-cake/";
+
 function showError(message) {
     document.getElementById(cakesContainerElementId).innerHTML = "";
     document.getElementById(cakesContainerElementId).hidden = true;
@@ -12,20 +14,30 @@ function showError(message) {
 }
 
 function createCakeElement(cake) {
+    const cakeElement = document.createElement("div");
+    cakeElement.style = "border: 1px solid black";
+
+    const cakeImgElement = document.createElement("img");
+    cakeImgElement.alt = cake.name;
+    //TODO Migrate style to a CSS file
+    cakeImgElement.style = "width: 100%; margin: auto; aspect-ratio: 4 / 3; object-fit: cover";
+    cakeImgElement.src = `${cakeImageBaseUrl}${cake.id}`;
+    cakeImgElement.onerror = () => {
+        cakeImgElement.replaceWith(createImagePlaceholder());
+    };
+    cakeElement.appendChild(cakeImgElement);
+
     const cakeNameElement = document.createElement("h2");
     cakeNameElement.textContent = cake.name;
+    cakeElement.appendChild(cakeNameElement);
 
     const cakePriceElement = document.createElement("p");
+    cakeElement.appendChild(cakePriceElement);
 
     cakePriceElement.textContent = `$ ${cake.price.toFixed(2)}`;
     const cakeLinkElement = document.createElement("a");
     cakeLinkElement.href = `/cakeDetail.html?id=${cake.id}`;
     cakeLinkElement.textContent = "View details";
-
-    const cakeElement = document.createElement("div");
-    cakeElement.style = "border: 1px solid black";
-    cakeElement.appendChild(cakeNameElement);
-    cakeElement.appendChild(cakePriceElement);
     cakeElement.appendChild(cakeLinkElement);
 
     return cakeElement;
@@ -135,6 +147,20 @@ function renderPagination(pagedResponse) {
             createPageButton(totalPages, ">>")
         );
     }
+}
+
+function createImagePlaceholder() {
+    const div = document.createElement("div");
+
+    div.textContent = "Cake with no image";
+
+    div.style.aspectRatio = "4 / 3";
+    div.style.margin = "auto";
+    div.style.background = "#ddd";
+    div.style.color = "#666";
+    div.style.border = "1px solid #aaa";
+
+    return div;
 }
 
 async function loadCakes(page = 1) {

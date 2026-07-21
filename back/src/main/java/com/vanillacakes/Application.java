@@ -1,6 +1,8 @@
 package com.vanillacakes;
 
 import com.vanillacakes.cakes.CakeController;
+import com.vanillacakes.cakes.CakeImageController;
+import com.vanillacakes.cakes.CakeImageRepository;
 import com.vanillacakes.cakes.CakeRepository;
 import com.vanillacakes.orders.OrderController;
 import com.vanillacakes.orders.OrderRepository;
@@ -57,6 +59,15 @@ public class Application {
                 cakeController
         );
         context.addServletMappingDecoded("/api/cakes/*", "cakeServlet");
+
+        CakeImageRepository cakeImageRepository = new CakeImageRepository(connection);
+        CakeImageController cakeImageController = new CakeImageController(cakeImageRepository);
+
+        Tomcat.addServlet(context,
+                "cakeImageServlet",
+                cakeImageController
+        );
+        context.addServletMappingDecoded("/api/cake-images/by-cake/*", "cakeImageServlet");
 
         OrderRepository orderRepository = new OrderRepository(connection);
         OrderService orderService = new OrderService(orderRepository);

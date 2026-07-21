@@ -3,6 +3,7 @@ import { createQuantityComponent } from "./quantityComponent.js";
 
 const cakeInformationElementId = "cakeInformation"
 const cakeNameElementId = "cakeName";
+const cakeFigureElementId = "cakeFigure";
 const cakeDescriptionElementId = "cakeDescription";
 const cakeUnitPriceElementId = "cakeUnitPrice";
 const quantityContainerElementId = "quantityContainer";
@@ -10,6 +11,8 @@ const totalPriceElementId = "totalPrice";
 const addToCartButtonElementId = "addToCartButton";
 const errorMessageDivId = "errorMessageDiv";
 const errorMessageParagraphId = "errorMessageParagraph";
+
+const cakeImageBaseUrl = "/api/cake-images/by-cake/";
 
 function showError(message) {
     document.getElementById(cakeInformationElementId).hidden = true;
@@ -25,6 +28,20 @@ function updateTotalPrice(quantity, unitPrice) {
 function handleAddToCart(cakeId, quantity) {
     addToCart(cakeId, quantity);
     window.location.href = "cart.html";
+}
+
+function createImagePlaceholder() {
+    const div = document.createElement("div");
+
+    div.textContent = "Cake with no image";
+
+    div.style.width = "30vw";
+    div.style.aspectRatio = "4 / 3";
+    div.style.background = "#ddd";
+    div.style.color = "#666";
+    div.style.border = "1px solid #aaa";
+
+    return div;
 }
 
 (async function loadCake() {
@@ -49,6 +66,18 @@ function handleAddToCart(cakeId, quantity) {
 
         const cake = await response.json();
         document.getElementById(cakeNameElementId).textContent = cake.name;
+
+        const cakeImgElement = document.createElement("img");
+        cakeImgElement.alt = cake.name;
+        //TODO Migrate style to a CSS file
+        cakeImgElement.style = "width: 30vw; margin: auto";
+        cakeImgElement.src = `${cakeImageBaseUrl}${cake.id}`;
+        cakeImgElement.onerror = () => {
+            cakeImgElement.replaceWith(createImagePlaceholder());
+        };
+        const cakeFigureElement = document.getElementById(cakeFigureElementId);
+        cakeFigureElement.appendChild(cakeImgElement);
+
         document.getElementById(cakeDescriptionElementId).textContent = cake.description;
         document.getElementById(cakeUnitPriceElementId).textContent = `$ ${cake.price.toFixed(2)}`;
 
@@ -61,7 +90,7 @@ function handleAddToCart(cakeId, quantity) {
 
         document.getElementById(addToCartButtonElementId).addEventListener('click', () => {
             handleAddToCart(cakeId, quantityComponent.getQuantity());
-        })
+        });
     } catch (error) {
         showError("Unexpected error");
         console.error(error);
