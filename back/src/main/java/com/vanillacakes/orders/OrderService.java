@@ -1,5 +1,6 @@
 package com.vanillacakes.orders;
 
+import com.vanillacakes.transactions.TransactionManager;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -11,17 +12,20 @@ public class OrderService {
 
     private static final int MAX_ITEMS_PER_ORDER = 30;
 
-    private final OrderRepository orderRepository;
+    private final TransactionManager transactionManager;
 
-    public OrderService(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderService(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
     public Order createOrder(Order order) {
         validateOrderItemsQuantity(order);
         validateCustomerInformation(order);
         Order aggregatedOrder = aggregateOrderItems(order);
-        return orderRepository.save(aggregatedOrder);
+        return transactionManager.execute(connection -> {
+            OrderRepository repository = new OrderRepository(connection);
+            return repository.save(aggregatedOrder);
+        });
     }
 
     private void validateOrderItemsQuantity(Order order) {

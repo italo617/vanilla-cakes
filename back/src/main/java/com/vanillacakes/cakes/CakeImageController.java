@@ -15,10 +15,10 @@ import java.util.Base64;
 public class CakeImageController extends HttpServlet {
 
     private final ObjectMapper mapper = new ObjectMapper();
-    private final CakeImageRepository cakeImageRepository;
+    private final CakeImageService cakeImageService;
 
-    public CakeImageController(CakeImageRepository cakeImageRepository) {
-        this.cakeImageRepository = cakeImageRepository;
+    public CakeImageController(CakeImageService cakeImageService) {
+        this.cakeImageService = cakeImageService;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CakeImageController extends HttpServlet {
             return;
         }
 
-        CakeImageContent cakeImageContent = cakeImageRepository.findByCakeId(id);
+        CakeImageContent cakeImageContent = cakeImageService.findByCakeId(id);
         if (cakeImageContent == null) {
             resp.sendError(
                     HttpServletResponse.SC_NOT_FOUND,
@@ -70,7 +70,7 @@ public class CakeImageController extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.setStatus(HttpServletResponse.SC_CREATED);
-        mapper.writeValue(resp.getWriter(), new CreateCakeImageResponse(cakeImageRepository.save(cakeImage)));
+        mapper.writeValue(resp.getWriter(), new CreateCakeImageResponse(cakeImageService.save(cakeImage)));
     }
 
     private Long extractId(HttpServletRequest req) {

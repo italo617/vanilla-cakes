@@ -17,10 +17,10 @@ public class CakeController extends HttpServlet {
     private static final int MAX_PAGE_SIZE = 50;
 
     private final ObjectMapper mapper = new ObjectMapper();
-    private final CakeRepository cakeRepository;
+    private final CakeService cakeService;
 
-    public CakeController(CakeRepository cakeRepository) {
-        this.cakeRepository = cakeRepository;
+    public CakeController(CakeService cakeService) {
+        this.cakeService = cakeService;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class CakeController extends HttpServlet {
                 createCakeRequest.description(),
                 createCakeRequest.price(),
                 createCakeRequest.active());
-        cake = cakeRepository.save(cake);
+        cake = cakeService.save(cake);
         String cakeJson = mapper.writeValueAsString(cake);
 
         resp.setContentType("application/json");
@@ -71,7 +71,7 @@ public class CakeController extends HttpServlet {
             return;
         }
 
-        Cake cake = cakeRepository.findById(id);
+        Cake cake = cakeService.findById(id);
         if (cake == null) {
             resp.sendError(
                     HttpServletResponse.SC_NOT_FOUND,
@@ -115,8 +115,7 @@ public class CakeController extends HttpServlet {
             return;
         }
 
-        PagedResult<Cake> cakes =
-                cakeRepository.findCakes(pageNumber, pageSize);
+        PagedResult<Cake> cakes = cakeService.findCakes(pageNumber, pageSize);
         String cakesJson = mapper.writeValueAsString(cakes);
 
         resp.setContentType("application/json");

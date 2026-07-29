@@ -1,5 +1,6 @@
 package com.vanillacakes.orders;
 
+import com.vanillacakes.transactions.TransactionManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
     @Mock
-    private OrderRepository orderRepository;
+    private TransactionManager transactionManager;
 
     @InjectMocks
     private OrderService orderService;
@@ -36,7 +37,7 @@ class OrderServiceTest {
         order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
         long orderId = 99L;
-        when(orderRepository.save(ArgumentMatchers.any(Order.class))).thenReturn(fakeSave(order, orderId));
+        when(transactionManager.execute(ArgumentMatchers.any())).thenReturn(fakeSave(order, orderId));
 
         Order createdOrder = orderService.createOrder(order);
         assertEquals(orderId, createdOrder.getId());

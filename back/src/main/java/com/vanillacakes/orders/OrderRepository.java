@@ -65,7 +65,6 @@ public class OrderRepository {
         return order;
     }
 
-    // TODO: execute save inside a transaction
     public Order save(Order order) {
         String sql_order = """
                     INSERT INTO orders
