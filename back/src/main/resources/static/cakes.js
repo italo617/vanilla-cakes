@@ -15,30 +15,35 @@ function showError(message) {
 
 function createCakeElement(cake) {
     const cakeElement = document.createElement("div");
-    cakeElement.style = "border: 1px solid black";
+    cakeElement.classList.add("cake-card");
 
     const cakeImgElement = document.createElement("img");
     cakeImgElement.alt = cake.name;
-    //TODO Migrate style to a CSS file
-    cakeImgElement.style = "width: 100%; margin: auto; aspect-ratio: 4 / 3; object-fit: cover";
     cakeImgElement.src = `${cakeImageBaseUrl}${cake.id}`;
     cakeImgElement.onerror = () => {
         cakeImgElement.replaceWith(createImagePlaceholder());
     };
     cakeElement.appendChild(cakeImgElement);
 
+    const cakeTextDivElement = document.createElement("div");
+    cakeTextDivElement.classList.add("cake-text");
+    cakeElement.appendChild(cakeTextDivElement);
+
     const cakeNameElement = document.createElement("h2");
     cakeNameElement.textContent = cake.name;
-    cakeElement.appendChild(cakeNameElement);
+    cakeTextDivElement.appendChild(cakeNameElement);
 
     const cakePriceElement = document.createElement("p");
-    cakeElement.appendChild(cakePriceElement);
+    cakePriceElement.classList.add("cake-price");
+    cakeTextDivElement.appendChild(cakePriceElement);
 
     cakePriceElement.textContent = `$ ${cake.price.toFixed(2)}`;
+
     const cakeLinkElement = document.createElement("a");
     cakeLinkElement.href = `/cakeDetail.html?id=${cake.id}`;
+    cakeLinkElement.classList.add("primary-button");
     cakeLinkElement.textContent = "View details";
-    cakeElement.appendChild(cakeLinkElement);
+    cakeTextDivElement.appendChild(cakeLinkElement);
 
     return cakeElement;
 }
@@ -151,14 +156,10 @@ function renderPagination(pagedResponse) {
 
 function createImagePlaceholder() {
     const div = document.createElement("div");
+    div.classList.add("cake-image-placeholder");
 
     div.textContent = "Cake with no image";
 
-    div.style.aspectRatio = "4 / 3";
-    div.style.margin = "auto";
-    div.style.background = "#ddd";
-    div.style.color = "#666";
-    div.style.border = "1px solid #aaa";
 
     return div;
 }

@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+    /* Vanilla */
+    --background: #F8F3E8;
+
+    /* Flavours */
+    --primary: #8B5E3C;
+    --primary-hover: #5C3A21;
+    --accent: #C98A32;
+    --info: #6D7FB8;
+    --surface: #FFFFFF;
+
+    /* Text */
+    --text: #4B382A;
+    --border: #C9BDAA;
+
+    /* Shadows */
+    --shadow-small: 0 2px 8px rgba(0,0,0,.08);
+    --shadow-medium: 0 4px 16px rgba(0,0,0,.10);
+
+    /* Radius */
+    --radius-small: 6px;
+    --radius-medium: 10px;
+}
+
+*, *::before, *::after  {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 1rem;
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: "Nunito", sans-serif;
+    line-height: 1.6;
+}
+
+h1 {
+    color: var(--primary);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: .8rem 1.4rem;
+    font-size: 1rem;
+    transition: background-color .2s;
+}
+
+/* For anchors and buttons */
+.primary-button {
+    display: inline-block;
+    padding: .8rem 1.4rem;
+    background-color: var(--primary);
+    color: var(--surface);
+    border-radius: var(--radius-small);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.primary-button:hover {
+    background-color: var(--primary-hover);
+}
+
+input {
+    padding: .75rem;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+input:focus {
+    outline: 2px solid var(--info);
+    border-color: var(--info);
+}
+
+a {
+    text-decoration: none;
+}
+
+.cake-image-placeholder {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background: var(--border);
+    color: var(--text);
+}
+
+.cake-detail-image {
+    width: min(100%, 500px);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    margin: auto;
+}
+
+.cake-price {
+    font-size: 1.4em;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+/* cakes.html */
+
+#cakesContainer {
+    margin: 0 auto;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.cake-card {
+    border-radius: var(--radius-medium);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow-small);
+    transition: transform .2s, box-shadow .2s;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.cake-card img {
+    margin: auto;
+    object-fit: cover;
+    height: 100%;
+}
+
+.cake-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+}
+
+.cake-text {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    margin-left: 0;
+}
+
+.cake-text p, .cake-text a {
+    margin-top: auto;
+}

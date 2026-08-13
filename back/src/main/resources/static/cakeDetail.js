@@ -1,7 +1,7 @@
-import { addToCart } from './cartCommons.js'
+import { addToCart } from './cartCommons.js';
 import { createQuantityComponent } from "./quantityComponent.js";
 
-const cakeInformationElementId = "cakeInformation"
+const cakeInformationElementId = "cakeInformation";
 const cakeNameElementId = "cakeName";
 const cakeFigureElementId = "cakeFigure";
 const cakeDescriptionElementId = "cakeDescription";
@@ -33,13 +33,8 @@ function handleAddToCart(cakeId, quantity) {
 function createImagePlaceholder() {
     const div = document.createElement("div");
 
+    div.classList.add("cake-image-placeholder", "cake-detail-image");
     div.textContent = "Cake with no image";
-
-    div.style.width = "30vw";
-    div.style.aspectRatio = "4 / 3";
-    div.style.background = "#ddd";
-    div.style.color = "#666";
-    div.style.border = "1px solid #aaa";
 
     return div;
 }
@@ -69,8 +64,7 @@ function createImagePlaceholder() {
 
         const cakeImgElement = document.createElement("img");
         cakeImgElement.alt = cake.name;
-        //TODO Migrate style to a CSS file
-        cakeImgElement.style = "width: 30vw; margin: auto";
+        cakeImgElement.classList.add("cake-detail-image");
         cakeImgElement.src = `${cakeImageBaseUrl}${cake.id}`;
         cakeImgElement.onerror = () => {
             cakeImgElement.replaceWith(createImagePlaceholder());

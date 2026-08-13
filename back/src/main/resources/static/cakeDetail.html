@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanilla Cakes - Cake Detail</title>
+    <link rel="stylesheet" href="style.css">
     <script type="module" src="cakeDetail.js" defer></script>
 </head>
 <body>
@@ -11,13 +12,13 @@
         <h1 id="cakeName"></h1>
         <figure id="cakeFigure"></figure>
         <p id="cakeDescription"></p>
-        <p id="cakeUnitPrice"></p>
+        <p id="cakeUnitPrice" class="cake-price"></p>
 
         <div id="quantityContainer"></div>
 
         <p>Total: <span id="totalPrice"></span></p>
 
-        <button id="addToCartButton">
+        <button id="addToCartButton" class="primary-button">
             Add to cart
         </button>
     </main>
