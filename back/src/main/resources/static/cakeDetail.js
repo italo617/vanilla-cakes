@@ -1,14 +1,14 @@
 import { addToCart } from './cartCommons.js';
 import { createQuantityComponent } from "./quantityComponent.js";
 
-const cakeInformationElementId = "cakeInformation";
-const cakeNameElementId = "cakeName";
-const cakeFigureElementId = "cakeFigure";
-const cakeDescriptionElementId = "cakeDescription";
-const cakeUnitPriceElementId = "cakeUnitPrice";
-const quantityContainerElementId = "quantityContainer";
-const totalPriceElementId = "totalPrice";
-const addToCartButtonElementId = "addToCartButton";
+const cakeInformationElementId = "cake-information";
+const cakeNameElementId = "cake-name";
+const cakeFigureElementId = "cake-figure";
+const cakeDescriptionElementId = "cake-description";
+const cakeUnitPriceElementId = "cake-unit-price";
+const quantityContainerElementId = "quantity-container";
+const totalPriceElementId = "total-price";
+const addToCartButtonElementId = "add-to-cart-button";
 const errorMessageDivId = "errorMessageDiv";
 const errorMessageParagraphId = "errorMessageParagraph";
 
@@ -60,7 +60,6 @@ function createImagePlaceholder() {
         }
 
         const cake = await response.json();
-        document.getElementById(cakeNameElementId).textContent = cake.name;
 
         const cakeImgElement = document.createElement("img");
         cakeImgElement.alt = cake.name;
@@ -72,6 +71,7 @@ function createImagePlaceholder() {
         const cakeFigureElement = document.getElementById(cakeFigureElementId);
         cakeFigureElement.appendChild(cakeImgElement);
 
+        document.getElementById(cakeNameElementId).textContent = cake.name;
         document.getElementById(cakeDescriptionElementId).textContent = cake.description;
         document.getElementById(cakeUnitPriceElementId).textContent = `$ ${cake.price.toFixed(2)}`;
 

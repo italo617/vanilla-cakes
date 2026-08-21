@@ -8,7 +8,7 @@
     <script type="module" src="./cart.js" defer></script>
 </head>
 <body>
-    <main id="cartInformation">
+    <main class="page-content" id="cart-information">
         <h1>Cart</h1>
         <table>
             <thead>
@@ -20,16 +20,16 @@
                     <th><!-- Column reserved for remove button --></th>
                 </tr>
             </thead>
-            <tbody id="cartItems"></tbody>
+            <tbody id="cart-items"></tbody>
             <tfoot>
                 <tr>
                     <td colspan="3"><strong>Total</strong></td>
-                    <td id="cartTotal">$ 0.00</td>
-                    <td id="clearCartTd"></td>
+                    <td id="cart-total">$ 0.00</td>
+                    <td id="clear-cart-td"></td>
                 </tr>
             </tfoot>
         </table>
-        <button id="proceedToCheckoutButton" class="primary-button">Proceed to Checkout</button>
+        <button id="proceed-to-checkout-button" class="primary-button">Proceed to Checkout</button>
     </main>
 
     <div id="errorMessageDiv" hidden>

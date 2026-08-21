@@ -150,3 +150,68 @@ a {
 .cake-text p, .cake-text a {
     margin-top: auto;
 }
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid var(--border);
+    padding: .625rem;
+}
+
+/* cakeDetail.html */
+#cake-information {
+    display: grid;
+    max-width: min(70vw, 1500px);
+    grid-template-columns: 1fr 1fr;
+    margin: 0 auto;
+    gap: 3rem;
+}
+
+#cake-information figure {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    justify-self: start;
+}
+
+@media (max-width: 1000px) {
+    #cake-information {
+        display: block;
+        max-width: 100%;
+    }
+}
+
+.page-content {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* checkout.html */
+
+#checkout-fieldset {
+    width: 100%;
+    max-width: 600px;
+}
+
+#checkout-fieldset legend {
+    font-weight: bold;
+}
+
+/* orderSuccess.html */
+
+#order-success-content dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .5rem 1rem;
+}
+
+#order-success-content dt {
+    font-weight: bold;
+}
+
+#order-success-content dd {
+    margin: 0;
+}

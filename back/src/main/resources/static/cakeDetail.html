@@ -8,19 +8,21 @@
     <script type="module" src="cakeDetail.js" defer></script>
 </head>
 <body>
-    <main id="cakeInformation">
-        <h1 id="cakeName"></h1>
-        <figure id="cakeFigure"></figure>
-        <p id="cakeDescription"></p>
-        <p id="cakeUnitPrice" class="cake-price"></p>
+    <main id="cake-information">
+        <figure id="cake-figure"></figure>
+        <div>
+            <h1 id="cake-name"></h1>
+            <p id="cake-description"></p>
+            <p id="cake-unit-price" class="cake-price"></p>
 
-        <div id="quantityContainer"></div>
+            <div id="quantity-container"></div>
 
-        <p>Total: <span id="totalPrice"></span></p>
+            <p>Total: <span id="total-price"></span></p>
 
-        <button id="addToCartButton" class="primary-button">
-            Add to cart
-        </button>
+            <button id="add-to-cart-button" class="primary-button">
+                Add to cart
+            </button>
+        </div>
     </main>
 
     <div id="errorMessageDiv" hidden>

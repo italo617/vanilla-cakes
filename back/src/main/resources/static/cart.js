@@ -1,12 +1,12 @@
 import {loadCart, removeFromCart, setToCart, clearCart} from "./cartCommons.js";
 import {createQuantityComponent} from "./quantityComponent.js";
 
-const cartInformationElementId = "cartInformation";
-const cartItemsElementId = "cartItems";
-const cartTotalElementId = "cartTotal";
-const totalCakePriceClassName = "total_price";
-const clearCartTdElementId = "clearCartTd";
-const proceedToCheckoutButtonElementId = "proceedToCheckoutButton"
+const cartInformationElementId = "cart-information";
+const cartItemsElementId = "cart-items";
+const cartTotalElementId = "cart-total";
+const totalCakePriceClassName = "total-price";
+const clearCartTdElementId = "clear-cart-td";
+const proceedToCheckoutButtonElementId = "proceed-to-checkout-button"
 const errorMessageDivId = "errorMessageDiv";
 const errorMessageParagraphId = "errorMessageParagraph";
 
