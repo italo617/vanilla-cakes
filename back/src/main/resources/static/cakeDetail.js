@@ -9,8 +9,8 @@ const cakeUnitPriceElementId = "cake-unit-price";
 const quantityContainerElementId = "quantity-container";
 const totalPriceElementId = "total-price";
 const addToCartButtonElementId = "add-to-cart-button";
-const errorMessageDivId = "errorMessageDiv";
-const errorMessageParagraphId = "errorMessageParagraph";
+const errorMessageDivId = "error-message-div";
+const errorMessageParagraphId = "error-message-paragraph";
 
 const cakeImageBaseUrl = "/api/cake-images/by-cake/";
 
@@ -48,14 +48,14 @@ function createImagePlaceholder() {
     const cakeId = Number(cakeIdString);
 
     if (!cakeIdString || Number.isNaN(cakeId)) {
-        showError("Missing valid cake id");
+        showError("Missing valid cake id.");
         return;
     }
 
     try {
         const response = await fetch(`/api/cakes/${cakeId}`);
         if (!response.ok) {
-            showError("Could not load cake");
+            showError("Could not load cake.");
             return;
         }
 
@@ -86,7 +86,7 @@ function createImagePlaceholder() {
             handleAddToCart(cakeId, quantityComponent.getQuantity());
         });
     } catch (error) {
-        showError("Unexpected error");
+        showError("Unexpected error.");
         console.error(error);
     }
 })();

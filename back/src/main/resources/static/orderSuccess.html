@@ -5,22 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <script type="module" src="orderSuccess.js" defer></script>
+    <script src="components.js" defer></script>
     <title>Vanilla Cakes - Order Success</title>
 </head>
 <body>
-    <main class="page-content" id="order-success-content">
-        <h1>Order Successfully Placed</h1>
-        <dl>
-            <dt>Order ID:</dt> <dd>#<span id="order-id"></span></dd>
-            <dt>Order Date:</dt> <dd id="order-created-at"></dd>
-            <dt>Recipient Name:</dt> <dd id="order-client-name"></dd>
-            <dt>Full Address:</dt> <dd id="order-full-address"></dd>
-            <dt>Payment Method:</dt> <dd id="order-payment-method"></dd>
-        </dl>
-        <p>Your delicious cakes will never arrive, but thank you for helping test this project.</p>
+    <div id="site-header"></div>
+    <main class="page-content">
+        <div id="order-success-content">
+            <h1>Order Successfully Placed</h1>
+            <dl>
+                <dt>Order ID:</dt> <dd>#<span id="order-id"></span></dd>
+                <dt>Order Date:</dt> <dd id="order-created-at"></dd>
+                <dt>Recipient Name:</dt> <dd id="order-client-name"></dd>
+                <dt>Full Address:</dt> <dd id="order-full-address"></dd>
+                <dt>Payment Method:</dt> <dd id="order-payment-method"></dd>
+            </dl>
+            <div class="order-disclaimer">
+                <strong>One tiny problem...</strong>
+                <p>Your cakes aren't actually going anywhere. This is a demo project, after all.</p>
+            </div>
+        </div>
+        <div id="error-message-div" hidden>
+            <p id="error-message-paragraph"></p>
+        </div>
     </main>
-    <div id="errorMessageDiv" hidden>
-        <p id="errorMessageParagraph"></p>
-    </div>
+    <div id="site-footer"></div>
 </body>
 </html>

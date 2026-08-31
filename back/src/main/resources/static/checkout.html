@@ -5,56 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <script type="module" src="./checkout.js" defer></script>
+    <script src="components.js" defer></script>
     <title>Vanilla Cakes - Checkout</title>
 </head>
 <body>
-    <main class="page-content" id="checkout-information">
-        <h1>Checkout</h1>
-        <p>
-            <strong>Notice: </strong>
-            This is a study project.
-            No payment will be processed, no order will be shipped, and no real products will be delivered.
-        </p>
-        <form id="checkout-order">
-            <h2>Customer Information</h2>
-            <p><label for="client-name">Recipient Name: </label><input id="client-name" name="client-name" type="text" required/></p>
-            <p><label for="full-address">Full Address: </label><input id="full-address" name="full-address" type="text" required/></p>
+    <div id="site-header"></div>
+    <main class="page-content">
+        <div id="checkout-information">
+            <h1>Checkout</h1>
+            <p>
+                <strong>Notice: </strong>
+                This is a study project.
+                No payment will be processed, no order will be shipped, and no real products will be delivered.
+            </p>
+            <form id="checkout-order">
+                <h2>Customer Information</h2>
+                <p><label for="client-name">Recipient Name: </label><input id="client-name" name="client-name" type="text" required/></p>
+                <p><label for="full-address">Full Address: </label><input id="full-address" name="full-address" type="text" required/></p>
 
-            <fieldset id="checkout-fieldset">
-                <legend>Payment</legend>
-                <p><input id="cash" name="payment-method" type="radio" value="cash_on_delivery" required><label for="cash">Cash on
-                    Delivery</label></p>
-                <p><input id="credit-card" name="payment-method" type="radio" value="credit_card" required><label
-                        for="credit-card">Credit Card</label></p>
-                <p><input id="debit-card" name="payment-method" type="radio" value="debit_card" required><label
-                        for="debit-card">Debit Card</label></p>
-            </fieldset>
+                <fieldset id="checkout-fieldset">
+                    <legend>Payment</legend>
+                    <p><input id="cash" name="payment-method" type="radio" value="cash_on_delivery" required><label for="cash">Cash on
+                        Delivery</label></p>
+                    <p><input id="credit-card" name="payment-method" type="radio" value="credit_card" required><label
+                            for="credit-card">Credit Card</label></p>
+                    <p><input id="debit-card" name="payment-method" type="radio" value="debit_card" required><label
+                            for="debit-card">Debit Card</label></p>
+                </fieldset>
 
-            <h2>Summary of Your Order</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>Cake</th>
-                    <th>Unit Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody id="order-items"></tbody>
-                <tfoot>
-                <tr>
-                    <td colspan="3"><strong>Total</strong></td>
-                    <td id="order-total">$ 0.00</td>
-                </tr>
-                </tfoot>
-            </table>
+                <h2>Summary of Your Order</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Cake</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody id="order-items"></tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="3"><strong>Total</strong></td>
+                        <td id="order-total">$ 0.00</td>
+                    </tr>
+                    </tfoot>
+                </table>
 
-            <button id="submit-button" class="primary-button" type="submit">Place Order</button>
-        </form>
+                <button id="submit-button" class="primary-button" type="submit">Place Order</button>
+            </form>
+        </div>
+
+        <div id="error-message-div" hidden>
+            <p id="error-message-paragraph"></p>
+        </div>
     </main>
 
-    <div id="errorMessageDiv" hidden>
-        <p id="errorMessageParagraph"></p>
-    </div>
+    <div id="site-footer"></div>
 </body>
 </html>

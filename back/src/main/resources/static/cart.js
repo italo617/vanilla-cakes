@@ -2,13 +2,16 @@ import {loadCart, removeFromCart, setToCart, clearCart} from "./cartCommons.js";
 import {createQuantityComponent} from "./quantityComponent.js";
 
 const cartInformationElementId = "cart-information";
+const cartTableElementId = "cart-table";
 const cartItemsElementId = "cart-items";
 const cartTotalElementId = "cart-total";
 const totalCakePriceClassName = "total-price";
 const clearCartTdElementId = "clear-cart-td";
-const proceedToCheckoutButtonElementId = "proceed-to-checkout-button"
-const errorMessageDivId = "errorMessageDiv";
-const errorMessageParagraphId = "errorMessageParagraph";
+const proceedToCheckoutButtonElementId = "proceed-to-checkout-button";
+const emptyCartParagraphElementId = "empty-cart-paragraph";
+const browseCakesButtonElementId = "browse-cakes-button";
+const errorMessageDivId = "error-message-div";
+const errorMessageParagraphId = "error-message-paragraph";
 
 function showError(message) {
     document.getElementById(cartInformationElementId).innerHTML = "";
@@ -22,6 +25,13 @@ async function loadCartTable() {
 
     document.getElementById(cartItemsElementId).innerHTML = "";
     document.getElementById(clearCartTdElementId).innerHTML = "";
+
+    const hasItems = Object.entries(cart).length > 0;
+    document.getElementById(cartTableElementId).hidden = !hasItems;
+    document.getElementById(proceedToCheckoutButtonElementId).hidden = !hasItems;
+    document.getElementById(emptyCartParagraphElementId).hidden = hasItems;
+    document.getElementById(browseCakesButtonElementId).hidden = hasItems;
+
     for (const [cakeId, quantity] of Object.entries(cart)) {
         const cake = await getCake(cakeId);
         if (!cake) {
@@ -30,7 +40,7 @@ async function loadCartTable() {
         createCakeRow(cake, quantity);
     }
     updateCartTotal();
-    if (Object.entries(cart).length > 0) {
+    if (hasItems) {
         createClearCartButton();
     }
 }
@@ -38,7 +48,7 @@ async function loadCartTable() {
 async function getCake(cakeId) {
     const response = await fetch(`/api/cakes/${cakeId}`)
     if (!response.ok) {
-        showError("Could not load cart");
+        showError("Could not load cart.");
         return;
     }
 
@@ -129,5 +139,15 @@ function addFunctionToProceedToCheckoutButton() {
     })
 }
 
+function addFunctionToBrowseCakesButton() {
+    const browseCakesButton = document.getElementById(browseCakesButtonElementId);
+
+    browseCakesButton.addEventListener("click", () => {
+        window.location.href = "cakes.html";
+    })
+}
+
+
 await loadCartTable();
 addFunctionToProceedToCheckoutButton();
+addFunctionToBrowseCakesButton();

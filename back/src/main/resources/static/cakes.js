@@ -1,7 +1,7 @@
 const cakesContainerElementId = "cakesContainer";
 const paginationElementId = "pagination";
-const errorMessageDivId = "errorMessageDiv";
-const errorMessageParagraphId = "errorMessageParagraph";
+const errorMessageDivId = "error-message-div";
+const errorMessageParagraphId = "error-message-paragraph";
 
 const cakeImageBaseUrl = "/api/cake-images/by-cake/";
 
@@ -48,7 +48,6 @@ function createCakeElement(cake) {
     return cakeElement;
 }
 
-//TODO: Improve pagination design
 function renderPagination(pagedResponse) {
 
     const paginationElement = document.getElementById(paginationElementId);
@@ -173,7 +172,7 @@ async function loadCakes(page = 1) {
         const response = await fetch(`/api/cakes?page=${page}`);
 
         if (!response.ok) {
-            showError("Could not load cakes");
+            showError("Could not load cakes.");
             return;
         }
 
@@ -188,7 +187,7 @@ async function loadCakes(page = 1) {
         renderPagination(cakePage);
 
     } catch (error) {
-        showError("Unexpected error");
+        showError("Unexpected error.");
         console.error(error);
     }
 }

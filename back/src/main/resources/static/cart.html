@@ -6,12 +6,15 @@
     <title>Vanilla Cakes - Cart</title>
     <link rel="stylesheet" href="style.css">
     <script type="module" src="./cart.js" defer></script>
+    <script src="components.js" defer></script>
 </head>
 <body>
-    <main class="page-content" id="cart-information">
-        <h1>Cart</h1>
-        <table>
-            <thead>
+    <div id="site-header"></div>
+    <main class="page-content">
+        <div id="cart-information">
+            <h1>Cart</h1>
+            <table id="cart-table">
+                <thead>
                 <tr>
                     <th>Name</th>
                     <th>Unit Price</th>
@@ -19,21 +22,27 @@
                     <th>Total Price</th>
                     <th><!-- Column reserved for remove button --></th>
                 </tr>
-            </thead>
-            <tbody id="cart-items"></tbody>
-            <tfoot>
+                </thead>
+                <tbody id="cart-items"></tbody>
+                <tfoot>
                 <tr>
                     <td colspan="3"><strong>Total</strong></td>
                     <td id="cart-total">$ 0.00</td>
                     <td id="clear-cart-td"></td>
                 </tr>
-            </tfoot>
-        </table>
-        <button id="proceed-to-checkout-button" class="primary-button">Proceed to Checkout</button>
+                </tfoot>
+            </table>
+            <button id="proceed-to-checkout-button" class="primary-button">Proceed to Checkout</button>
+
+            <p id="empty-cart-paragraph" hidden>Your cart is feeling a little lonely. Add a cake!</p>
+            <button id="browse-cakes-button" class="primary-button" hidden>Browse Cakes</button>
+        </div>
+
+        <div id="error-message-div" hidden>
+            <p id="error-message-paragraph"></p>
+        </div>
     </main>
 
-    <div id="errorMessageDiv" hidden>
-        <p id="errorMessageParagraph"></p>
-    </div>
+    <div id="site-footer"></div>
 </body>
 </html>

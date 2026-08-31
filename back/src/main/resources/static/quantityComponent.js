@@ -1,6 +1,7 @@
 export function createQuantityComponent(initialQuantity = 1, onQuantityChanged = () => {}) {
 
     const container = document.createElement("div");
+    container.classList.add("quantity-component");
 
     const decreaseButton = document.createElement("button");
     decreaseButton.textContent = "-";

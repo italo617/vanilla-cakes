@@ -5,8 +5,8 @@ const checkoutOrderElementId = "checkout-order";
 const cartItemsElementId = "order-items";
 const orderTotalElementId = "order-total";
 const totalCakePriceClassName = "total_price";
-const errorMessageDivId = "errorMessageDiv";
-const errorMessageParagraphId = "errorMessageParagraph";
+const errorMessageDivId = "error-message-div";
+const errorMessageParagraphId = "error-message-paragraph";
 
 function showError(message) {
     document.getElementById(checkoutInformationElementId).hidden = true;
@@ -38,7 +38,7 @@ async function loadCartTable() {
 async function getCake(cakeId) {
     const response = await fetch(`/api/cakes/${cakeId}`)
     if (!response.ok) {
-        showError("Could not load cart");
+        showError("Could not load checkout page.");
         return;
     }
 

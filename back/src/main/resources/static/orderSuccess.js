@@ -9,8 +9,8 @@ const paymentMethodLabels = {
     "credit_card": "Credit Card",
     "debit_card": "Debit Card"
 }
-const errorMessageDivId = "errorMessageDiv";
-const errorMessageParagraphId = "errorMessageParagraph";
+const errorMessageDivId = "error-message-div";
+const errorMessageParagraphId = "error-message-paragraph";
 
 function showError(message) {
     document.getElementById(orderSuccessContentElementId).innerHTML = "";
