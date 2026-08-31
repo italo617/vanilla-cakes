@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class OrderService {
 
-    private static final int MAX_ITEMS_PER_ORDER = 30;
+    private static final int MAX_ITEMS_PER_ORDER = 1000;
 
     private final TransactionManager transactionManager;
 
