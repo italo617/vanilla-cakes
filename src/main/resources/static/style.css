@@ -262,6 +262,10 @@ th, td {
     text-align: justify;
 }
 
+figure .cake-image-placeholder {
+    aspect-ratio: 4 / 3;
+}
+
 /* checkout.html */
 
 #checkout-fieldset {
