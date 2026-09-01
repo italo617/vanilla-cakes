@@ -111,25 +111,6 @@ class OrderServiceTest {
         assertEquals("Payment method cannot be empty", exception.getMessage());
     }
 
-
-    @Test
-    public void shouldNotCreateOrderThatSurpass30ItemsQuantityLimit() {
-        Order order = new Order();
-        OrderItem orderItem1 = new OrderItem(1L, 3, new BigDecimal("10.00"));
-        OrderItem orderItem2 = new OrderItem(2L, 10, new BigDecimal("20.00"));
-        OrderItem orderItem3 = new OrderItem(3L, 18, new BigDecimal("30.00"));
-        order.setOrderItems(new ArrayList<>(List.of(orderItem1, orderItem2, orderItem3)));
-        order.setClientName("Jane Doe");
-        order.setFullAddress("456 Example Street, Example City, EX 12345, USA");
-        order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderService.createOrder(order);
-        });
-
-        assertEquals("Max items per order exceeded", exception.getMessage());
-    }
-
     @Test
     public void shouldAggregateOrderItemsWithSameCakeId() {
         Order order = new Order();

@@ -132,4 +132,22 @@ public class CakeRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean existsAny() {
+        String sql = """
+            SELECT EXISTS (
+                SELECT 1
+                FROM cakes
+            )
+            """;
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            resultSet.next();
+            return resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -20,6 +20,7 @@ public class Application {
     public static void main(String[] args) throws Exception {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         setupDatabase(connectionFactory);
+        loadSeed(connectionFactory);
         setupWebServer(connectionFactory);
     }
 
@@ -27,6 +28,12 @@ public class Application {
         try (Connection connection = connectionFactory.create()) {
             LiquibaseRunner.run(connection);
         }
+    }
+
+    private static void loadSeed(ConnectionFactory connectionFactory) {
+        TransactionManager transactionManager = new TransactionManager(connectionFactory);
+        SeedLoader seedLoader = new SeedLoader(transactionManager);
+        seedLoader.load();
     }
 
     private static void setupWebServer(ConnectionFactory connectionFactory) throws LifecycleException {
